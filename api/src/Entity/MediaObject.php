@@ -66,4 +66,5 @@ class MediaObject
     public function getId(): ?int
     {
         return $this->id;
-
+    }
+}
