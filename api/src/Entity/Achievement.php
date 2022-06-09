@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\AchievementRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AchievementRepository::class)]
@@ -29,6 +31,20 @@ class Achievement
 
     #[ORM\Column(type: 'array', nullable: true)]
     private $tags = [];
+
+    #[ORM\ManyToMany(targetEntity: MediaObject::class)]
+    private $previewImages;
+
+    #[ORM\ManyToOne(targetEntity: MediaObject::class)]
+    private $heroImage;
+
+    #[ORM\ManyToOne(targetEntity: MediaObject::class)]
+    private $portfolioImage;
+
+    public function __construct()
+    {
+        $this->previewImages = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -91,6 +107,55 @@ class Achievement
     public function setTags(?array $tags): self
     {
         $this->tags = $tags;
+
+        return $this;
+    }
+
+
+    /**
+     * @return Collection|MediaObject[]
+     */
+    public function getPreviewImages(): Collection
+    {
+        return $this->previewImages;
+    }
+
+    public function addPreviewImage(MediaObject $previewImage): self
+    {
+        if (!$this->previewImages->contains($previewImage)) {
+            $this->previewImages[] = $previewImage;
+        }
+
+        return $this;
+    }
+
+    public function removePreviewImage(MediaObject $previewImage): self
+    {
+        $this->previewImages->removeElement($previewImage);
+
+        return $this;
+    }
+
+    public function getHeroImage(): ?MediaObject
+    {
+        return $this->heroImage;
+    }
+
+    public function setHeroImage(?MediaObject $heroImage): self
+    {
+        $this->heroImage = $heroImage;
+
+        return $this;
+    }
+
+    public function getPortfolioImage(): ?MediaObject
+    {
+        return $this->portfolioImage;
+    }
+
+    public function setPortfolioImage(?MediaObject $portfolioImage): self
+    {
+        $this->portfolioImage = $portfolioImage;
 
         return $this;
     }
