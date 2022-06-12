@@ -7,38 +7,56 @@ use App\Repository\AchievementRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: AchievementRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    itemOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['read:item', 'read:image']]
+        ]
+    ],
+    forceEager: true,
+    normalizationContext: ['groups' => ['read:collection']]
+)]
 class Achievement
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['read:collection', 'read:item'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['read:collection', 'read:item'])]
     private $title;
 
     #[ORM\Column(type: 'text', nullable: true)]
+    #[Groups(['read:collection', 'read:item'])]
     private $description;
 
     #[ORM\Column(type: 'text', nullable: true)]
+    #[Groups(['read:collection', 'read:item'])]
     private $shortDesc;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Groups(['read:collection', 'read:item'])]
     private $link;
 
     #[ORM\Column(type: 'array', nullable: true)]
     private $tags = [];
 
-    #[ORM\ManyToMany(targetEntity: MediaObject::class)]
+
+    #[ORM\ManyToMany(targetEntity: MediaObject::class, fetch: 'EAGER')]
+    #[Groups(['read:item'])]
     private $previewImages;
 
-    #[ORM\ManyToOne(targetEntity: MediaObject::class)]
+    #[ORM\ManyToOne(targetEntity: MediaObject::class, fetch: 'EAGER')]
+    #[Groups(['read:item'])]
     private $heroImage;
 
-    #[ORM\ManyToOne(targetEntity: MediaObject::class)]
+    #[ORM\ManyToOne(targetEntity: MediaObject::class, fetch: 'EAGER')]
+    #[Groups(['read:collection', 'read:item'])]
     private $portfolioImage;
 
     public function __construct()

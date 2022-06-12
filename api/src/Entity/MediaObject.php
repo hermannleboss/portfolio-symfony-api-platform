@@ -16,9 +16,6 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  */
 #[ORM\Entity]
 #[ApiResource(
-    iri: 'http://schema.org/MediaObject',
-    normalizationContext: ['groups' => ['media_object:read']],
-    itemOperations: ['get'],
     collectionOperations: [
         'get',
         'post' => [
@@ -43,7 +40,11 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
                 ],
             ],
         ],
-    ]
+    ],
+    iri: 'http://schema.org/MediaObject',
+    itemOperations: ['get' => ["force_eager" => true]],
+    forceEager: true,
+    normalizationContext: ['groups' => ['media_object:read']]
 )]
 class MediaObject
 {
@@ -51,7 +52,7 @@ class MediaObject
     private ?int $id = null;
 
     #[ApiProperty(iri: 'http://schema.org/contentUrl')]
-    #[Groups(['media_object:read'])]
+    #[Groups(['media_object:read', 'read:image', 'read:collection'])]
     public ?string $contentUrl = null;
 
     /**
