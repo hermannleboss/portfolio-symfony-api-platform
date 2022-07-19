@@ -42,9 +42,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         ],
     ],
     iri: 'http://schema.org/MediaObject',
-    itemOperations: ['get' => ["force_eager" => true]],
     forceEager: true,
-    normalizationContext: ['groups' => ['media_object:read']]
 )]
 class MediaObject
 {

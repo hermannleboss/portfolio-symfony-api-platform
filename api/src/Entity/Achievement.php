@@ -10,15 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: AchievementRepository::class)]
-#[ApiResource(
-    itemOperations: [
-        'get' => [
-            'normalization_context' => ['groups' => ['read:item', 'read:image']]
-        ]
-    ],
-    forceEager: true,
-    normalizationContext: ['groups' => ['read:collection']]
-)]
+#[ApiResource]
 class Achievement
 {
     #[ORM\Id]
