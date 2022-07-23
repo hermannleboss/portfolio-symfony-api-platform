@@ -66,4 +66,16 @@ class MediaObject
     {
         return $this->id;
     }
+
+    #[Groups(['read:Achievements', 'read:Achievement'])]
+    public function getFullPath(): string
+    {
+        if(isset($_SERVER['HTTPS'])){
+            $protocol = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != "off") ? "https" : "http";
+        }
+        else{
+            $protocol = 'http';
+        }
+        return $protocol . "://" . $_SERVER['HTTP_HOST'].'/'.$this->contentUrl;
+    }
 }

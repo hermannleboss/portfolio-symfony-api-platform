@@ -10,29 +10,39 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: AchievementRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    itemOperations: [
+        'put',
+        'delete',
+        'get'=>[
+            'normaization_context'=>['groups'=>['read:Achievements', 'read:Achievement']]
+        ],
+        'patch'
+    ],
+    normalizationContext: ['groups'=> ['read:Achievements']]
+)]
 class Achievement
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['read:collection', 'read:item'])]
+    #[Groups(['read:Achievements', 'read:Achievement'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['read:collection', 'read:item'])]
+    #[Groups(['read:Achievements', 'read:Achievement'])]
     private $title;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    #[Groups(['read:collection', 'read:item'])]
+    #[Groups(['read:Achievements', 'read:Achievement'])]
     private $description;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    #[Groups(['read:collection', 'read:item'])]
+    #[Groups(['read:Achievements', 'read:Achievement'])]
     private $shortDesc;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    #[Groups(['read:collection', 'read:item'])]
+    #[Groups(['read:Achievements', 'read:Achievement'])]
     private $link;
 
     #[ORM\Column(type: 'array', nullable: true)]
@@ -40,15 +50,15 @@ class Achievement
 
 
     #[ORM\ManyToMany(targetEntity: MediaObject::class, fetch: 'EAGER')]
-    #[Groups(['read:item'])]
+    #[Groups(['read:Achievements', 'read:Achievement'])]
     private $previewImages;
 
     #[ORM\ManyToOne(targetEntity: MediaObject::class, fetch: 'EAGER')]
-    #[Groups(['read:item'])]
+    #[Groups(['read:Achievements', 'read:Achievement'])]
     private $heroImage;
 
     #[ORM\ManyToOne(targetEntity: MediaObject::class, fetch: 'EAGER')]
-    #[Groups(['read:collection', 'read:item'])]
+    #[Groups(['read:Achievements', 'read:Achievement'])]
     private $portfolioImage;
 
     public function __construct()
